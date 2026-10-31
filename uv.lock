@@ -355,7 +355,7 @@ wheels = [
 ]
 
 [[package]]
-name = "python-project-factory"
+name = "gbdj"
 version = "0.1.0"
 source = { editable = "." }
 

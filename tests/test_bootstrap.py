@@ -37,16 +37,8 @@ def get_snapshot(root: Path) -> dict[str, bytes]:
     }
 
 
-def test_initialization_and_repeat(template: Path) -> None:
-    # This suite stays useful in generated projects as a no-op initialization test.
-    config = tomllib.loads((template / "pyproject.toml").read_text())
-    if config["project"]["name"] != "python-project-factory":
-        assert not bootstrap.run_bootstrap(
-            template,
-            config["project"]["name"],
-            config["tool"]["project-factory"]["package"],
-        )
-        return
+def test_initialization_and_repeat(pristine: Path) -> None:
+    template = pristine
     (template / "notes.txt").write_text("keep me")
     assert bootstrap.run_bootstrap(template, "weather-tools", "weather_tools")
     assert not (template / "src/project_name").exists()
@@ -67,6 +59,14 @@ def test_initialization_and_repeat(template: Path) -> None:
         cwd=template,
         check=True,
     )
+
+
+def test_repeat_preserves_custom_readme(pristine: Path) -> None:
+    bootstrap.run_bootstrap(pristine, "gbdj", "gbdj")
+    (pristine / "README.md").write_text("# GlobalStockBot\nCustom product content.\n")
+    before = get_snapshot(pristine)
+    assert not bootstrap.run_bootstrap(pristine, "gbdj", "gbdj")
+    assert get_snapshot(pristine) == before
 
 
 @pytest.mark.parametrize(
@@ -104,15 +104,29 @@ def pristine(template: Path) -> Path:
     package = config["tool"]["project-factory"]["package"]
     if package != "project_name":
         (template / "src" / package).rename(template / "src/project_name")
-        for name in ("pyproject.toml", "uv.lock", "README.md", "tests/test_smoke.py"):
+        replacements = {
+            "pyproject.toml": {
+                f'name = "{project}"': 'name = "python-project-factory"',
+                f'packages = ["src/{package}"]': 'packages = ["src/project_name"]',
+                f'package = "{package}"': 'package = "project_name"',
+            },
+            "uv.lock": {f'name = "{project}"': 'name = "python-project-factory"'},
+            "tests/test_smoke.py": {
+                f'import_module("{package}")': 'import_module("project_name")',
+            },
+        }
+        for name, markers in replacements.items():
             path = template / name
-            text = path.read_text().replace(project, "python-project-factory")
-            text = text.replace(package, "project_name")
-            text = text.replace(
-                "<!-- project-title -->python-project-factory",
-                "<!-- project-title -->Python Project Factory v1.0",
-            )
+            text = path.read_text()
+            for current, original in markers.items():
+                assert text.count(current) == 1
+                text = text.replace(current, original)
             path.write_text(text)
+        # Product documentation need not retain the original template title.
+        (template / "README.md").write_text(
+            "# <!-- project-title -->Python Project Factory v1.0\n"
+            "\nPackage: `src/project_name/`\n"
+        )
     return template
 
 

@@ -1,16 +1,26 @@
-# <!-- project-title -->Python Project Factory v1.0
+# <!-- project-title -->GlobalStockBot (GBDJ)
 
-Ein wiederverwendbares GitHub-Template für professionelle Python-Projekte und
-die Entwicklung mit Codex Cloud. Die technische Basis liefert Toolchain,
-Qualitätsprüfungen, Standards und eine sichere Projektinitialisierung.
-Vier Codex Skills unterstützen Discovery, Refinement, Issue-Umsetzung und Review;
-siehe die Verweise in [AGENTS.md](AGENTS.md). Es gibt keine Frameworks oder Dienste.
+GlobalStockBot ist eine geplante, erweiterbare Python-Trading-Plattform für
+Aktien. Langfristig soll sie internationale Aktienmärkte, regelbasierte
+Swing-Trading-Strategien, historische Auswertungen sowie Portfolio- und
+Risikomanagement unterstützen. Freqtrade dient als funktionale Orientierung;
+eine Übernahme seiner Architektur ist nicht beschlossen.
+
+Das Projekt befindet sich in der Product Discovery. Der
+[Product Brief](docs/product/product-brief.md) trennt bestätigte Anforderungen,
+Vorschläge, Annahmen und offene Entscheidungen. Distribution und Python-Paket
+heißen `gbdj`, der Produktname lautet GlobalStockBot.
+
+**Sicherheitsgrenze:** Zunächst ausschließlich Paper-Trading. Es gibt noch keine
+Trading-Funktionen und keine Brokeranbindung. Entwicklung und Tests dürfen keine
+Echtgeld-Orders auslösen. Vollautomatischer Live-Handel erfordert eine ausdrückliche
+spätere Freigabe und gehört nicht zum vorgeschlagenen MVP.
 
 ## Voraussetzungen
 
 - Git und Python 3.12 als definierte Startversion
 - [uv](https://docs.astral.sh/uv/getting-started/installation/), in CI Version 0.12.23
-- Für GitHub-Template und Pull Requests: passende Repository-Berechtigungen
+- Für Pull Requests: passende Repository-Berechtigungen
 
 ## Installation
 
@@ -21,63 +31,60 @@ uv sync --locked
 
 uv erstellt `.venv` und installiert das Projekt einschließlich der Dev-Gruppe.
 `uv.lock` ist versioniert. Dependency-Änderungen erfolgen mit `uv add` bzw.
-`uv add --dev`, danach werden Manifest und Lockfile gemeinsam geprüft und committed.
-Es sind keine Secrets oder laufenden Dienste erforderlich. Codex Cloud verwendet
-das vorhandene Checkout; zusätzliche Worktrees sind nicht nötig.
-
-## Qualitätsprüfungen
+`uv add --dev`; Manifest und Lockfile werden gemeinsam geprüft und committed.
+Für den aktuellen Projektstand sind keine Secrets oder laufenden Dienste nötig.
+Codex Cloud verwendet das vorhandene Checkout; zusätzliche Worktrees sind nicht
+nötig. In der aktuellen Cloud-Umgebung sind vor uv-Befehlen schreibbare Pfade nötig:
 
 ```bash
-uv run ruff format --check .
-uv run ruff check .
-uv run mypy src
-uv run mypy scripts
-uv run pytest
+export UV_CACHE_DIR=/workspace/.cache/uv
+export UV_PYTHON_INSTALL_DIR=/workspace/.local/share/uv/python
+cd /workspace/gbdj
+```
+
+## Entwicklung und Qualitätsprüfungen
+
+```bash
+uv run --locked ruff format --check .
+uv run --locked ruff check .
+uv run --locked mypy src
+uv run --locked mypy scripts
+uv run --locked pytest
 uv build
 ```
 
 Zum Formatieren: `uv run ruff format .`. pytest misst auch Branch-Coverage mit
-einer Mindestabdeckung von 85 %. Die GitHub-Actions-Pipeline führt Installation,
-Prüfungen und Paketbau bei Pull Requests und Pushes auf `main` aus.
+einer Mindestabdeckung von 85 %. GitHub Actions führt Installation,
+Qualitätsprüfungen und Paketbau bei Pull Requests und Pushes auf `main` aus.
+Arbeite auf einem eigenen Branch und lasse Änderungen per Pull Request prüfen;
+kein automatischer Merge. Die Ergebnisse dieser Initialisierung stehen im
+[Validierungsabschnitt des Product Briefs](docs/product/product-brief.md#validierung-dieses-auftrags).
 
-## Ein neues Projekt erstellen
+Die technische Basis stammt aus der Python Project Factory. Das vorhandene
+Skript wurde für diese Initialisierung verwendet:
 
-1. Aktiviere in den GitHub-Repository-Einstellungen **Template repository**.
-2. Erzeuge über **Use this template** ein neues Repository und klone es.
-3. Initialisiere das unveränderte Template vor eigenen Strukturänderungen:
+```bash
+python3 scripts/bootstrap_project.py --project-name gbdj --package-name gbdj
+```
 
-   ```bash
-   python3 scripts/bootstrap_project.py --project-name weather-tools --package-name weather_tools
-   uv sync --locked
-   ```
-
-4. Führe die Qualitätsprüfungen aus und committe die Initialisierung auf einem
-   eigenen Branch mit anschließendem Pull Request.
-
-Der Projektname ist ein kleingeschriebener Distribution-Name aus Buchstaben,
-Ziffern und einzelnen Bindestrichen (beginnend mit einem Buchstaben).
-Der Paketname ist ein kleingeschriebener ASCII-Python-Bezeichner; Keywords,
-Soft-Keywords, Standardbibliotheksnamen und Template-Platzhalter sind ausgeschlossen.
-
-Das Skript aktualisiert Projektname, Build-Pfad und Paket-Metadatum in
-`pyproject.toml`, den lokalen Projekteintrag in `uv.lock`, README-Titel und
-Strukturpfad sowie den Smoke-Test-Import. Es verschiebt das Platzhalterpaket.
-Andere Dateien bleiben erhalten. Gleiche Namen ergeben bei Wiederholung keine
-Änderungen; andere Namen nach Initialisierung, Zielkonflikte, Symlinks und
-abweichende Marker werden abgelehnt. Führe den Bootstrap ohne parallele Dateiedits
-aus. Er ist kein allgemeines Werkzeug zum späteren Umbenennen von Anwendungen.
+Die Initialisierung ist abgeschlossen. Eine Wiederholung mit denselben Namen
+ändert nichts; das Skript ist kein Werkzeug zum späteren Umbenennen des Produkts.
+Die bestehenden Skills unterstützen Discovery, Refinement, Issue-Umsetzung und
+Review; siehe [AGENTS.md](AGENTS.md). Dieser Auftrag erzeugt ausschließlich die
+Projektinitialisierung und den Product Brief; ein Backlog wird nicht angelegt.
 
 ## Struktur
 
 | Pfad | Zweck |
 | --- | --- |
-| `src/project_name/` | Importierbares Anwendungspaket mit Typinformationen |
-| `tests/` | Smoke-Test und Bootstrap-Verhaltenstests |
-| `scripts/bootstrap_project.py` | Sichere Initialisierung des Templates |
+| `src/gbdj/` | Initialisiertes Python-Paket mit Typinformationen |
+| `tests/` | Smoke-Test und Tests der bestehenden Factory-Werkzeuge |
+| `scripts/bootstrap_project.py` | Bestehendes Initialisierungsskript |
+| `docs/product/product-brief.md` | Produktverständnis und offene Entscheidungen |
 | `docs/standards/` | Dauerhafte Python- und Testkonventionen |
 | `docs/architecture/decisions/` | Architecture Decision Records |
-| `AGENTS.md` | Kurze Orientierung für Entwicklungsagenten |
-| `.agents/skills/` | Vier Skills mit Methoden und Ergebnisvorlagen |
+| `AGENTS.md` | Orientierung für Entwicklungsagenten |
+| `.agents/skills/` | Bestehende Skills mit Methoden und Ergebnisvorlagen |
 | `.github/` | CI und Pull-Request-Vorlage |
 
 Siehe [Python-Standards](docs/standards/python.md),
