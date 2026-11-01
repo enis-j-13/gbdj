@@ -1,0 +1,33 @@
+id,title,type,parent,priority,mvp,dependencies,publication_approval,implementation_approval,github_number,github_url,project_item_id,status,remote_duplicate_check
+E-01,[E-01] [Epic] Verlässliche historische Aktienbasis,Epic,,P1,MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-02,[E-02] [Epic] Nachvollziehbare Strategieexperimente,Epic,,P1,MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-03,[E-03] [Epic] Kontrolliertes Portfolio und Risiko,Epic,,P1,MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-04,[E-04] [Epic] Lokales Paper-Trading ohne Echtgeldwirkung,Epic,,P1,MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-05,[E-05] [Epic] Überprüfbare Ergebnisse und begleiteter Betrieb,Epic,,P1,MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-06,[E-06] [Epic] Weitere Strategien und internationale Märkte,Epic,,P2,Nach MVP,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+E-07,[E-07] [Epic] Entscheidungsgrundlage für spätere Broker und Live-Freigabe,Epic,,P2,Nach MVP / Untersuchung,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-01,[T-01] [Task] MVP klären und Abnahmevertrag festhalten,Task,E-01,P1,MVP / Gate G0,,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-02,[T-02] [Task] Datenrechte und historisches Eingabeformat prüfen,Task,E-01,P1,MVP / Gate G0,T-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-03,[T-03] [Task] Minimale Kernverträge und Replay-Schnittstellen entscheiden,Task,E-02,P1,MVP / Gate G0,T-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-04,[T-04] [Task] Offline-Ausführungsmodus gegen Live-Aufrufe absichern,Task,E-04,P1,MVP / M1,T-03,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-01,[S-01] [Story] Historische Tagesdaten aus einer lokalen Datei einlesen,Story,E-01,P1,MVP / M1,T-02; T-03,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-02,[S-02] [Story] Ersten historischen Kauf-Verkauf-Ablauf durchspielen,Story,E-02,P1,MVP / M1,T-04; S-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-03,[S-03] [Story] Unvollständige und widersprüchliche Tagesdaten zurückweisen,Story,E-01,P1,MVP / M2,S-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-04,[S-04] [Story] Eine einfache Swing-Strategie konfigurieren und Signale berechnen,Story,E-02,P1,MVP / M2,S-02,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-05,[S-05] [Story] Historische Mehrinstrument-Läufe mit Kosten auswerten,Story,E-02,P1,MVP / M2,S-03; S-04,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-06,[S-06] [Story] Positionen und Cash nach simulierten Fills bewerten,Story,E-03,P1,MVP / M2,S-05,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-07,[S-07] [Story] Orderabsichten vor Ausführung gegen Kapital- und Positionslimits prüfen,Story,E-03,P1,MVP / M3,S-06; T-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-08,[S-08] [Story] Verlustgrenzen und Pausenstatus durchsetzen,Story,E-03,P1,MVP / M3,S-07,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-09,[S-09] [Story] Splits und Dividenden in einer Referenzhistorie korrekt behandeln,Story,E-01,P1,MVP / M3,S-03; S-06,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-05,[T-05] [Task] Persistenzvertrag für das lokale Paper-Journal entscheiden,Task,E-04,P1,MVP / vor M3,T-03,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-10,[S-10] [Story] Lokale Paper-Sitzung schrittweise und persistent ausführen,Story,E-04,P1,MVP / M3,S-07; S-04; T-05,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-11,[S-11] [Story] Paper-Lauf nach Unterbrechung konsistent abgleichen,Story,E-04,P1,MVP / M4,S-10,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-12,[S-12] [Story] Backtest und Paper-Ergebnisse nachvollziehbar berichten,Story,E-05,P1,MVP / M4,S-06; S-09; S-11,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-06,[T-06] [Task] Betriebs- und Evaluationsvertrag festlegen,Task,E-05,P1,MVP / vor M4,T-01,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-13,[S-13] [Story] Lokale Paper-Läufe planen und Fehler sichtbar machen,Story,E-05,P1,MVP / M4,T-06; S-11; S-08,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-07,"[T-07] [Task] Backup, Restore und Störungsnachweise für Paper-Betrieb erbringen",Task,E-05,P1,MVP / M4,S-13; S-12; S-08,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-08,[T-08] [Task] Historische Evaluation und Paper-Abnahme dokumentieren,Task,E-05,P1,MVP / M5,T-07; S-05; S-09; S-12,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-14,[S-14] [Story] Zweite regelbasierte Strategie getrennt vergleichen,Story,E-06,P2,Nach MVP,T-08,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+S-15,[S-15] [Story] Zusätzlichen Aktienmarkt mit Kalender und Währung auswerten,Story,E-06,P2,Nach MVP,T-08,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-09,[T-09] [Task] Offizielle Broker-Paper-APIs und Zulässigkeit vergleichen,Task,E-07,P2,Nach MVP / Untersuchung,T-08,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
+T-10,[T-10] [Task] Freigabekriterien für möglichen Live-Handel untersuchen,Task,E-07,P3,Nach MVP / nur Freigabekatalog,T-09,ausstehend,nicht erteilt,,,,nicht veröffentlicht,blockiert
